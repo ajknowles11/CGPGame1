@@ -154,16 +154,25 @@ void PlayMode::update(float elapsed) {
 	background_fade -= std::floor(background_fade);
 
 	constexpr float PlayerSpeed = 30.0f;
-	if (left.pressed) player_at.x -= PlayerSpeed * elapsed;
-	if (right.pressed) player_at.x += PlayerSpeed * elapsed;
-	if (down.pressed) player_at.y -= PlayerSpeed * elapsed;
-	if (up.pressed) player_at.y += PlayerSpeed * elapsed;
+	if (left.pressed) player.at.x -= PlayerSpeed * elapsed;
+	if (right.pressed) player.at.x += PlayerSpeed * elapsed;
+	if (down.pressed) player.at.y -= PlayerSpeed * elapsed;
+	if (up.pressed) player.at.y += PlayerSpeed * elapsed;
 
 	//reset button press counters:
 	left.downs = 0;
 	right.downs = 0;
 	up.downs = 0;
 	down.downs = 0;
+
+	apply_physics(elapsed);
+}
+
+void PlayMode::apply_physics(float elapsed) {
+	// do for all physics chars
+	constexpr float Gravity = 20.0f;
+	if (player.at.y > 0)
+	player.at.y -= Gravity * elapsed;
 }
 
 void PlayMode::draw(glm::uvec2 const &drawable_size) {
@@ -187,20 +196,20 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 	}
 
 	//background scroll:
-	ppu.background_position.x = int32_t(-0.5f * player_at.x);
-	ppu.background_position.y = int32_t(-0.5f * player_at.y);
+	ppu.background_position.x = int32_t(-0.5f * player.at.x);
+	ppu.background_position.y = int32_t(-0.5f * player.at.y);
 
 	//player sprite:
-	ppu.sprites[0].x = int8_t(player_at.x);
-	ppu.sprites[0].y = int8_t(player_at.y);
+	ppu.sprites[0].x = int8_t(player.at.x);
+	ppu.sprites[0].y = int8_t(player.at.y);
 	ppu.sprites[0].index = 32;
 	ppu.sprites[0].attributes = 7;
 
 	//some other misc sprites:
 	for (uint32_t i = 1; i < 63; ++i) {
 		float amt = (i + 2.0f * background_fade) / 62.0f;
-		ppu.sprites[i].x = int8_t(0.5f * PPU466::ScreenWidth + std::cos( 2.0f * M_PI * amt * 5.0f + 0.01f * player_at.x) * 0.4f * PPU466::ScreenWidth);
-		ppu.sprites[i].y = int8_t(0.5f * PPU466::ScreenHeight + std::sin( 2.0f * M_PI * amt * 3.0f + 0.01f * player_at.y) * 0.4f * PPU466::ScreenWidth);
+		ppu.sprites[i].x = int8_t(0.5f * PPU466::ScreenWidth + std::cos( 2.0f * M_PI * amt * 5.0f + 0.01f * player.at.x) * 0.4f * PPU466::ScreenWidth);
+		ppu.sprites[i].y = int8_t(0.5f * PPU466::ScreenHeight + std::sin( 2.0f * M_PI * amt * 3.0f + 0.01f * player.at.y) * 0.4f * PPU466::ScreenWidth);
 		ppu.sprites[i].index = 32;
 		ppu.sprites[i].attributes = 6;
 		if (i % 2) ppu.sprites[i].attributes |= 0x80; //'behind' bit

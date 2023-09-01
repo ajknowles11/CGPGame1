@@ -1,5 +1,6 @@
 #include "PPU466.hpp"
 #include "Mode.hpp"
+#include "Player.hpp"
 
 #include <glm/glm.hpp>
 
@@ -13,9 +14,12 @@ struct PlayMode : Mode {
 	//functions called by main loop:
 	virtual bool handle_event(SDL_Event const &, glm::uvec2 const &window_size) override;
 	virtual void update(float elapsed) override;
+	virtual void apply_physics(float elapsed);
 	virtual void draw(glm::uvec2 const &drawable_size) override;
 
 	//----- game state -----
+
+	Player player;
 
 	//input tracking:
 	struct Button {
@@ -25,9 +29,6 @@ struct PlayMode : Mode {
 
 	//some weird background animation:
 	float background_fade = 0.0f;
-
-	//player position:
-	glm::vec2 player_at = glm::vec2(0.0f);
 
 	//----- drawing handled by PPU466 -----
 
