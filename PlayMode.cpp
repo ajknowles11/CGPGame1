@@ -153,11 +153,11 @@ void PlayMode::update(float elapsed) {
 	background_fade += elapsed / 10.0f;
 	background_fade -= std::floor(background_fade);
 
-	constexpr float PlayerSpeed = 30.0f;
-	if (left.pressed) player.at.x -= PlayerSpeed * elapsed;
-	if (right.pressed) player.at.x += PlayerSpeed * elapsed;
-	if (down.pressed) player.at.y -= PlayerSpeed * elapsed;
-	if (up.pressed) player.at.y += PlayerSpeed * elapsed;
+	player.walk_input(left.pressed, right.pressed, elapsed);
+	if (player.at.y == 0 && up.pressed) {
+		player.at.y = 1;
+		player.velocity.y = 200.0;
+	}
 
 	//reset button press counters:
 	left.downs = 0;
@@ -170,9 +170,18 @@ void PlayMode::update(float elapsed) {
 
 void PlayMode::apply_physics(float elapsed) {
 	// do for all physics chars
-	constexpr float Gravity = 20.0f;
-	if (player.at.y > 0)
-	player.at.y -= Gravity * elapsed;
+	// put this gravity stuff in new function in player
+	constexpr float Gravity = 500.0f;
+
+	if (player.at.y <= 0) {
+		player.at.y = 0;
+		player.velocity.y = 0;
+	} 
+	else {
+		player.velocity.y -= Gravity * elapsed;
+	}
+
+	player.at += player.velocity * elapsed;
 }
 
 void PlayMode::draw(glm::uvec2 const &drawable_size) {
