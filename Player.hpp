@@ -21,6 +21,9 @@ protected:
 	float gravity = 500.0f;
 	float max_fall_speed = 200.0f;
 
+	uint8_t max_num_jumps = 2;
+	uint8_t jump_count = 0;
+
 	void update_walk_velocity(int8_t dir, float elapsed);
 	void update_fall_velocity(float elapsed);
 };

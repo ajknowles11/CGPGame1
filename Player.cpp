@@ -33,9 +33,15 @@ void Player::update_walk_velocity(int8_t dir, float elapsed) {
 void Player::update_fall_velocity(float elapsed) {
     if (at.y <= 0) {
 		at.y = 0;
-        if (velocity.y < 0) velocity.y = 0;
+        if (velocity.y < 0) { // this means we just landed
+            velocity.y = 0;
+            jump_count = 0;
+        }
 	} 
 	else {
+        if (jump_count == 0) { // this means we just started falling (not in air yet)
+            jump_count += 1;
+        }
 		velocity.y -= gravity * elapsed;
 	}
 
@@ -43,5 +49,9 @@ void Player::update_fall_velocity(float elapsed) {
 }
 
 void Player::jump() {
-    velocity.y += 200.0;
+    if (jump_count >= max_num_jumps) {
+        return;
+    }
+    jump_count += 1;
+    velocity.y = 200.0;
 }

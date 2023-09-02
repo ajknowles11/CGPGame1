@@ -159,7 +159,7 @@ void PlayMode::update(float elapsed) {
 	else player.walk_dir = 0;
 
 	// pass jump input to player, only when up pressed (not repeatedly)
-	if (player.at.y == 0 && up.pressed && !up.last_pressed) {
+	if (up.pressed && !up.last_pressed) {
 		player.jump();
 	}
 
