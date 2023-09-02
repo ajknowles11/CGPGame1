@@ -7,6 +7,3 @@ dist/SDL2.dll
 dist/game
 dist/game.exe
 maek-cache.json
-.idea/
-.vs/
-.vscode/
