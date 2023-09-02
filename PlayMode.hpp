@@ -14,7 +14,6 @@ struct PlayMode : Mode {
 	//functions called by main loop:
 	virtual bool handle_event(SDL_Event const &, glm::uvec2 const &window_size) override;
 	virtual void update(float elapsed) override;
-	virtual void apply_physics(float elapsed);
 	virtual void draw(glm::uvec2 const &drawable_size) override;
 
 	//----- game state -----
@@ -25,6 +24,7 @@ struct PlayMode : Mode {
 	struct Button {
 		uint8_t downs = 0;
 		uint8_t pressed = 0;
+		uint8_t last_pressed = 0;
 	} left, right, down, up;
 
 	//some weird background animation:

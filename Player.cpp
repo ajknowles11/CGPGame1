@@ -7,9 +7,14 @@ Player::Player() {
 Player::~Player() {
 }
 
-void Player::walk_input(bool left, bool right, float elapsed) {
-    if (left == right) {
-        //decelerate
+void Player::update(float elapsed) {
+    update_walk_velocity(walk_dir, elapsed);
+    update_fall_velocity(elapsed);
+}
+
+void Player::update_walk_velocity(int8_t dir, float elapsed) {
+    // if not moving in direction, character decelerates
+    if (dir == 0) {
         float to_add = walk_decel * elapsed;
         if (velocity.x < 0) {
             velocity.x = glm::clamp(velocity.x + to_add, velocity.x, 0.0f);
@@ -19,6 +24,24 @@ void Player::walk_input(bool left, bool right, float elapsed) {
         }
         return;
     }
-    float to_add = left ? -walk_accel * elapsed : walk_accel * elapsed;
+
+    // otherwise we accelerate in movement dir until max speed
+    float to_add = dir < 0 ? -walk_accel * elapsed : walk_accel * elapsed;
     velocity.x = glm::clamp(velocity.x + to_add, -max_walk_speed, max_walk_speed);
+}
+
+void Player::update_fall_velocity(float elapsed) {
+    if (at.y <= 0) {
+		at.y = 0;
+        if (velocity.y < 0) velocity.y = 0;
+	} 
+	else {
+		velocity.y -= gravity * elapsed;
+	}
+
+	at += velocity * elapsed;
+}
+
+void Player::jump() {
+    velocity.y += 200.0;
 }
