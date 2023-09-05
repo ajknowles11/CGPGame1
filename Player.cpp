@@ -13,6 +13,7 @@ void Player::update(float elapsed) {
 }
 
 void Player::update_walk_velocity(int8_t dir, float elapsed) {
+    facing_left = dir < 0;
     // if not moving in direction, character decelerates
     if (dir == 0) {
         float to_add = walk_decel * elapsed;

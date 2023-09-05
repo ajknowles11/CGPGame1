@@ -1,11 +1,15 @@
 #include "PPU466.hpp"
 #include "Mode.hpp"
+#include "Load.hpp"
 #include "Player.hpp"
+#include "SpriteAtlas.hpp"
 
 #include <glm/glm.hpp>
 
 #include <vector>
 #include <deque>
+
+//Load<SpriteAtlas> atlas(LoadTagDefault, [](){});
 
 struct PlayMode : Mode {
 	PlayMode();

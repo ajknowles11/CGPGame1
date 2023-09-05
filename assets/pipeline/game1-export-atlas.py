@@ -25,7 +25,6 @@ def get_sprites_string(drawable, palettes_string):
     
     # now iterate through sprites
     atlas_out = ""
-    palettes_map_out = ""
     # i = horizontal sprite pos, j = vert sprite position.
     # u = horizontal pixel pos (within sprite), v = vert pixel pos.
     # top left origin.
@@ -48,7 +47,7 @@ def get_sprites_string(drawable, palettes_string):
                             this_palette.append(color)
             # if all transparent just stop reading tiles at this point
             if len(this_palette) <= 1 and this_palette[0][3] == '\x00':
-                return (atlas_out, palettes_map_out)
+                return atlas_out
             p_index = -1
             for p in palettes:
                 if all(clr in p for clr in this_palette):
@@ -56,8 +55,6 @@ def get_sprites_string(drawable, palettes_string):
                     break
             if p_index == -1:
                 raise Exception("No valid palette found for sprite: ({},{}). Colors: {}. Palette: {}".format(i,j, this_palette, palettes))
-            # assign palette in palette map
-            palettes_map_out += chr(p_index)
 
             # now assign tile table indices to sprite and output in atlas string
             for v in range(8):
@@ -68,7 +65,7 @@ def get_sprites_string(drawable, palettes_string):
                         color = tuple(['\x00', '\x00', '\x00', '\x00'])
                     atlas_out += chr(palettes[p_index].index(color))
     
-    return (atlas_out, palettes_map_out)
+    return atlas_out
 
 def write_string(filename, output_string):
     file = open(filename, 'w')
@@ -77,11 +74,10 @@ def write_string(filename, output_string):
 
 def export_atlas(image, drawable, palettes_filename, atlas_filename):
     palettes_string = get_palettes_string(drawable)
-    (atlas_string, palettes_map_string) = get_sprites_string(drawable, palettes_string)
+    atlas_string = get_sprites_string(drawable, palettes_string)
 
-    out_palettes = "plt0" + struct.pack('<I', len(palettes_string)) + palettes_string
-    out_atlas = "pdx0" + struct.pack('<I', len(palettes_map_string)) + palettes_map_string
-    out_atlas += "spr0" + struct.pack('<I', len(atlas_string)) + atlas_string
+    out_palettes = "chr0" + struct.pack('<I', len(palettes_string)) + palettes_string
+    out_atlas = "chr0" + struct.pack('<I', len(atlas_string)) + atlas_string
     write_string(palettes_filename, out_palettes)
     write_string(atlas_filename, out_atlas)
 
@@ -96,7 +92,7 @@ register(
     "*",
     [
         (PF_FILENAME, "palettes_filename", "Export file path for palettes", ".palettes"),
-        (PF_FILENAME, "atlas_filename", "Export file path for sprite atlas (with palette map)", ".atlas")
+        (PF_FILENAME, "atlas_filename", "Export file path for sprite atlas", ".atlas")
     ],
     [],
     export_atlas)
