@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 from gimpfu import *
+import struct
 
 def get_palettes_string(drawable):
     palettes_region = drawable.get_pixel_rgn(0, 0, 4, 8)
@@ -24,7 +25,7 @@ def get_sprites_string(drawable, palettes_string):
     
     # now iterate through sprites
     atlas_out = ""
-    palettes_map_out = "\x00" # since first tile in atlas img is used for palettes, I fill the first slot in the palette map to make visuals match. just made checking work easier.
+    palettes_map_out = ""
     # i = horizontal sprite pos, j = vert sprite position.
     # u = horizontal pixel pos (within sprite), v = vert pixel pos.
     # top left origin.
@@ -69,21 +70,20 @@ def get_sprites_string(drawable, palettes_string):
     
     return (atlas_out, palettes_map_out)
 
-
-
 def write_string(filename, output_string):
     file = open(filename, 'w')
     file.write(output_string)
     file.close()
 
-
-def export_atlas(image, drawable, palettes_filename, atlas_filename, palettes_map_filename):
+def export_atlas(image, drawable, palettes_filename, atlas_filename):
     palettes_string = get_palettes_string(drawable)
     (atlas_string, palettes_map_string) = get_sprites_string(drawable, palettes_string)
 
-    write_string(palettes_filename, palettes_string)
-    write_string(atlas_filename, atlas_string)
-    write_string(palettes_map_filename, palettes_map_string)
+    out_palettes = "plt0" + struct.pack('<I', len(palettes_string)) + palettes_string
+    out_atlas = "pdx0" + struct.pack('<I', len(palettes_map_string)) + palettes_map_string
+    out_atlas += "spr0" + struct.pack('<I', len(atlas_string)) + atlas_string
+    write_string(palettes_filename, out_palettes)
+    write_string(atlas_filename, out_atlas)
 
 register(
     "export_atlas",
@@ -96,8 +96,7 @@ register(
     "*",
     [
         (PF_FILENAME, "palettes_filename", "Export file path for palettes", ".palettes"),
-        (PF_FILENAME, "atlas_filename", "Export file path for sprite atlas", ".atlas"),
-        (PF_FILENAME, "palettes_map_filename", "Export file path for sprite palette map", ".pmap")
+        (PF_FILENAME, "atlas_filename", "Export file path for sprite atlas (with palette map)", ".atlas")
     ],
     [],
     export_atlas)
