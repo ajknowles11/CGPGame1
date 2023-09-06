@@ -14,12 +14,6 @@ public:
 	glm::vec2 at = glm::vec2(30, 30);
 	glm::vec2 velocity = glm::vec2(0.0f);
 
-	struct {
-		uint8_t head_r = 1;
-		uint8_t legs_r = 4;
-		
-	} sprites;
-
 protected:
 
 	uint8_t hp = 3;

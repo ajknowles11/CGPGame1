@@ -1,7 +1,8 @@
-#include "PPU466.hpp"
-#include "Mode.hpp"
+#include "data_path.hpp"
 #include "Load.hpp"
+#include "Mode.hpp"
 #include "Player.hpp"
+#include "PPU466.hpp"
 #include "SpriteAtlas.hpp"
 
 #include <glm/glm.hpp>
@@ -9,7 +10,9 @@
 #include <vector>
 #include <deque>
 
-//Load<SpriteAtlas> atlas(LoadTagDefault, [](){});
+Load<SpriteAtlas> sprite_atlas(LoadTagDefault, [&](){
+	return new SpriteAtlas(data_path("assets/dojo.atlas"));
+});
 
 struct PlayMode : Mode {
 	PlayMode();

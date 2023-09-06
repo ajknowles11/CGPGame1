@@ -18,6 +18,11 @@ PlayMode::PlayMode() {
 
 	//Also, *don't* use these tiles in your game:
 
+	{ // fill in ppu fields with sprite atlas data
+		ppu.palette_table = sprite_atlas->palette_table;
+		ppu.tile_table = sprite_atlas->tile_table;
+	}
+
 	{ //use tiles 0-16 as some weird dot pattern thing:
 		std::array< uint8_t, 8*8 > distance;
 		for (uint32_t y = 0; y < 8; ++y) {
