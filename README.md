@@ -8,7 +8,7 @@ Screen Shot:
 
 ![Screen Shot](screenshot.png)
 
-How Your Asset Pipeline Works:
+Asset Pipeline:
 
 For my asset pipeline I used a GIMP plugin (included in assets/pipeline) to extract large groups of tiles at once from joined sprite images, and save the layouts in a struct SpriteSpec. This allows me to have game objects which cycle through specs as a whole rather than changing individual tiles for all animations.
 
