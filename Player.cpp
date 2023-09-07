@@ -99,6 +99,13 @@ void Player::attack() {
     is_attacking = true;
 }
 
+void Player::dmg() {
+    hp -= 1;
+    if (hp == 0) {
+        deleted = true;
+    }
+}
+
 void Player::update_sprite_spec() {
     if (is_on_ground) {
         if (!facing_left) {

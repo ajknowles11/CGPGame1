@@ -11,7 +11,7 @@ Enemy::~Enemy() {
 
 void Enemy::update(float elapsed) {
     if (player) {
-        if (glm::abs(player->at.x - at.x) < 8) {
+        if (glm::abs(player->at.x - at.x) < 16) {
             walk_dir = 0;
             if (!is_attacking) {
                 if (atk_time >= 2*atk_length) {
@@ -110,6 +110,9 @@ void Enemy::jump() {
 
 void Enemy::attack() {
     is_attacking = true;
+    if (glm::distance(player->at, at) < 18) {
+        player->dmg();
+    } 
 }
 
 void Enemy::update_sprite_spec() {

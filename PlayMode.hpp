@@ -28,6 +28,8 @@ struct PlayMode : Mode {
 
 	bool try_spawn_object(std::shared_ptr<GameObject> obj, glm::vec2 pos = glm::vec2(0,0));
 
+	void delete_object(std::shared_ptr<GameObject> obj);
+
 	uint8_t sprite_count = 0;
 
 	std::shared_ptr<Player> player;

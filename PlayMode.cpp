@@ -81,6 +81,10 @@ bool PlayMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size)
 }
 
 void PlayMode::update(float elapsed) {
+	static bool game_over = false;
+	if (game_over) {
+		return;
+	}
 	static bool player_spawned = false;
 	if (!player_spawned && sprite_atlas) {
 		// spawn player
@@ -116,9 +120,22 @@ void PlayMode::update(float elapsed) {
 	down.downs = 0;
 	attack.downs = 0;
 
+	static std::vector<std::shared_ptr<GameObject>> deleted;
+
 	// update GameObjects
 	for (auto obj : game_objects) {
 		obj->update(elapsed);
+		if (obj->deleted) {
+			deleted.emplace_back(obj);
+		}
+	}
+
+	// delete any
+	for (auto obj : deleted) {
+		if (obj == player) {
+			game_over = true;
+		}
+		delete_object(obj);
 	}
 
 	// update last_pressed value of inputs (must be after used)
@@ -163,6 +180,7 @@ bool PlayMode::try_spawn_object(std::shared_ptr<GameObject> obj, glm::vec2 pos) 
 	for (uint8_t i = 0; i < 64; i++) {
 		if (allocated_count == obj->get_max_sprites()) break;
 		if (!sprite_activity[i]) {
+			sprite_activity[i] = true;
 			idxs.emplace_back(i);
 			allocated_count += 1;
 			sprite_count += 1;
@@ -173,4 +191,23 @@ bool PlayMode::try_spawn_object(std::shared_ptr<GameObject> obj, glm::vec2 pos) 
 	obj->at = pos;
 	game_objects.emplace_back(obj);
 	return true;
+}
+
+void PlayMode::delete_object(std::shared_ptr<GameObject> obj) {
+	SpriteSpec spec = spec_table[obj->get_sprite_spec()];
+	std::vector<uint8_t> sprite_idxs = obj->sprite_table_indices;
+
+	for (uint8_t i = 0; i < game_objects.size(); i++) {
+		if (game_objects[i] == obj) {
+			game_objects.erase(game_objects.begin() + i);
+			break;
+		}
+	}
+
+	// remove allocated sprites
+	for (auto i : sprite_idxs) {
+		sprite_activity[i] = true;
+		ppu.sprites[i].y = 240;
+		sprite_count -= 1;
+	}
 }

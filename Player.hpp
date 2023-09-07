@@ -23,6 +23,8 @@ public:
 	virtual uint8_t get_max_sprites() override;
     virtual uint8_t get_sprite_spec() override;
 
+	void dmg();
+
 protected:
 
 	uint8_t hp = 3;
