@@ -95,11 +95,18 @@ void Player::jump() {
     is_on_ground = false;
 }
 
-void Player::attack() {
+void Player::attack(std::vector<std::shared_ptr<GameObject>> objs) {
     is_attacking = true;
+
+    for (auto obj : objs) {
+        if (glm::distance(obj->at, at) < 20 && obj != self_pointer) {
+            obj->dmg();
+        }
+    }
 }
 
 void Player::dmg() {
+    if (is_attacking) return; // this makes the game super easy but it's too hard otherwise, and this fix is quick
     hp -= 1;
     if (hp == 0) {
         deleted = true;

@@ -149,3 +149,9 @@ void Enemy::update_sprite_spec() {
         }
     }
 }
+
+void Enemy::dmg() {
+    hp -= 1;
+    if (hp <= 0)
+    deleted = true;
+}

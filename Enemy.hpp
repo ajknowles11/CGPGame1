@@ -16,6 +16,8 @@ public:
 
 	void attack();
 
+    virtual void dmg() override;
+
 	bool facing_left = 0;
 	int8_t walk_dir = 0; // this is just -1, 0, or 1
 	glm::vec2 velocity = glm::vec2(0.0f);

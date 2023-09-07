@@ -110,7 +110,7 @@ void PlayMode::update(float elapsed) {
 
 	// pass attack input to player
 	if (attack.pressed && !attack.last_pressed) {
-		player->attack();
+		player->attack(game_objects);
 	}
 
 	//reset button press counters:

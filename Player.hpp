@@ -13,7 +13,7 @@ public:
 
 	void jump();
 
-	void attack();
+	void attack(std::vector<std::shared_ptr<GameObject>> objs);
 
 	bool facing_left = 0;
 	int8_t walk_dir = 0; // this is just -1, 0, or 1
@@ -23,7 +23,9 @@ public:
 	virtual uint8_t get_max_sprites() override;
     virtual uint8_t get_sprite_spec() override;
 
-	void dmg();
+	virtual void dmg() override;
+
+	std::shared_ptr<GameObject> self_pointer;
 
 protected:
 

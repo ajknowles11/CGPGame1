@@ -16,3 +16,6 @@ uint8_t GameObject::get_max_sprites() {
 uint8_t GameObject::get_sprite_spec() {
     return currentSpriteSpec;
 } 
+
+void GameObject::dmg() {
+}
