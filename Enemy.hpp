@@ -7,7 +7,7 @@
 
 class Enemy : public GameObject {
 public:
-	Enemy(std::shared_ptr<Player> pl);
+	Enemy(std::shared_ptr<Player> pl, uint8_t health = 1, float attack_length = 0.5f);
 	virtual ~Enemy();
 
 	virtual void update(float elapsed) override;
@@ -50,7 +50,7 @@ protected:
 	const float walk_anim_length = 0.3f;
 	float walk_anim_time = 0;
 
-	const float atk_length = 0.5f;
+	float atk_length = 0.5f;
 	float atk_time = 0;
 	bool is_attacking;
 

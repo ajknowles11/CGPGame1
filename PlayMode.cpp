@@ -29,6 +29,10 @@ PlayMode::PlayMode() {
 		ppu.sprites[i].x = 0;
 		ppu.sprites[i].y = 240;
 	}
+
+	for (auto v : ppu.background) {
+		v = 64;
+	}
 }
 
 PlayMode::~PlayMode() {
@@ -85,12 +89,27 @@ void PlayMode::update(float elapsed) {
 	if (game_over) {
 		return;
 	}
+	total_elapsed += elapsed;
+
 	static bool player_spawned = false;
 	if (!player_spawned && sprite_atlas) {
 		// spawn player
 		player = std::make_shared<Player>();
 		player_spawned = try_spawn_object(player, glm::vec2(128,0));
-		try_spawn_object(std::make_shared<Enemy>(player), glm::vec2(0,0));
+		
+		try_spawn_object(std::make_shared<Enemy>(player, 1), glm::vec2(0,0));
+	}
+
+	// spawn enemy
+	enemy_spawn_time += elapsed;
+	if (enemy_spawn_time >= enemy_spawn_delay) {
+		enemy_spawn_time = 0;
+		float x = left_side_spawn ? 0.f : 256.f;
+		left_side_spawn = !left_side_spawn;
+
+	// hp scale
+		uint8_t hp = 1 + (uint8_t)(total_elapsed / 30); 
+		try_spawn_object(std::make_shared<Enemy>(player, hp), glm::vec2(x,0));
 	}
 
 	//slowly rotates through [0,1):
@@ -163,7 +182,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		}
 	}
 
-	ppu.background_color = glm::u8vec4(0xD2, 0x66, 0x00, 0xFF);
+	ppu.background_color = glm::u8vec4(0x40, 0x44, 0x77, 0xFF);
 
 	//--- actually draw ---
 	ppu.draw(drawable_size);

@@ -1,8 +1,8 @@
-# (TODO: your game's title)
+# CATANA
 
-Author: (TODO: your name)
+Author: Andrew Knowles
 
-Design: (TODO: In two sentences or fewer, describe what is new and interesting about your game.)
+Design: This game is a beat-em-up style swordfighting game, where you play as a katana-wielding cat.
 
 Screen Shot:
 
@@ -10,13 +10,19 @@ Screen Shot:
 
 How Your Asset Pipeline Works:
 
-(TODO: describe the steps in your asset pipeline, from source files to tiles/backgrounds/whatever you upload to the PPU466.)
+For my asset pipeline I used a GIMP plugin (included in assets/pipeline) to extract large groups of tiles at once from joined sprite images, and save the layouts in a struct SpriteSpec. This allows me to have game objects which cycle through specs as a whole rather than changing individual tiles for all animations.
 
-(TODO: make sure the source files you drew are included. You can [link](your/file.png) to them to be a bit fancier.)
+The plugin itself can be run when placed in the GIMP plugins folder via File > ComputerGameProgramming > Export Atlas.
+
+I didn't really get to finish the game itself because this process took a really long time.
 
 How To Play:
 
-(TODO: describe the controls and (if needed) goals/strategy.)
+Arrow keys to move, z to attack. You can also double jump.
+
+You have 3 hit points and need to survive enemies that spawn offscreen every few seconds. 
+
+NOTE: I spent almost all of my time working on asset pipelines so the actual assets themselves are a little incomplete, and there are bugs. If nothing spawns try relaunching, and I don't know why there are cat heads in the background (maybe victims of the player character in the past).
 
 This game was built with [NEST](NEST.md).
 

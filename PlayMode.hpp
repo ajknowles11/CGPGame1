@@ -35,6 +35,11 @@ struct PlayMode : Mode {
 	std::shared_ptr<Player> player;
 	std::vector<std::shared_ptr<GameObject>> game_objects;
 
+	float total_elapsed = 0;
+	float enemy_spawn_delay = 3.f;
+	float enemy_spawn_time = 0;
+	bool left_side_spawn;
+
 	//input tracking:
 	struct Button {
 		uint8_t downs = 0;

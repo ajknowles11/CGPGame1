@@ -1,8 +1,10 @@
 #include "Enemy.hpp"
 
-Enemy::Enemy(std::shared_ptr<Player> pl) {
+Enemy::Enemy(std::shared_ptr<Player> pl, uint8_t health, float attack_length) {
     currentSpriteSpec = 0;
     player = pl;
+    hp = health;
+    atk_length = attack_length;
     atk_time = 2*atk_length;
 }
 
