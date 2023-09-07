@@ -188,6 +188,8 @@ def export_atlas(image, drawable, atlas_filename):
                 + "spc2" + struct.pack('<I', len(specs_string)) + specs_string 
                 + "spi3" + struct.pack('<I', len(specinfo_string)) + specinfo_string)
 
+    # Note: there's a bug of some kind that adds the byte 0D to the specs string randomly, but only once. I just remove it manually in a hex editor.
+
 register(
     "export_atlas",
     "Export palettes, tiles, and sprite specifiers from this image.",

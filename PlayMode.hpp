@@ -1,5 +1,6 @@
 #include "data_path.hpp"
 #include "GameObject.hpp"
+#include "Enemy.hpp"
 #include "Load.hpp"
 #include "Mode.hpp"
 #include "Player.hpp"

@@ -1,3 +1,0 @@
-player sprite: heads are tiles 0-2, legs and tail are 3-5, no attack sword hilt/foot is 6-8, no attack blade is 9.
-
-

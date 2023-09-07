@@ -111,7 +111,8 @@ const game_objs = [
 	maek.CPP('GL.cpp'),
 	maek.CPP('GameObject.cpp'),
 	maek.CPP('Player.cpp'),
-	maek.CPP('SpriteAtlas.cpp')
+	maek.CPP('SpriteAtlas.cpp'),
+	maek.CPP('Enemy.cpp')
 ];
 
 //the '[exeFile =] LINK(objFiles, exeFileBase, [, options])' links an array of objects into an executable:

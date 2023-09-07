@@ -86,6 +86,7 @@ void PlayMode::update(float elapsed) {
 		// spawn player
 		player = std::make_shared<Player>();
 		player_spawned = try_spawn_object(player, glm::vec2(128,0));
+		try_spawn_object(std::make_shared<Enemy>(player), glm::vec2(0,0));
 	}
 
 	//slowly rotates through [0,1):

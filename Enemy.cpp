@@ -1,14 +1,30 @@
-#include "Player.hpp"
+#include "Enemy.hpp"
 
-Player::Player() {
+Enemy::Enemy(std::shared_ptr<Player> pl) {
     currentSpriteSpec = 0;
+    player = pl;
+    atk_time = 2*atk_length;
 }
 
-Player::~Player() {
+Enemy::~Enemy() {
 }
 
-void Player::update(float elapsed) {
-    update_walk_velocity(walk_dir, elapsed);
+void Enemy::update(float elapsed) {
+    if (player) {
+        if (glm::abs(player->at.x - at.x) < 8) {
+            walk_dir = 0;
+            if (!is_attacking) {
+                if (atk_time >= 2*atk_length) {
+                    attack();
+                    atk_time = 0;
+                }
+            }
+        }
+        else {
+            walk_dir = player->at.x > at.x ? 1 : -1;
+        }
+        update_walk_velocity(walk_dir, elapsed);
+    }
     update_fall_velocity(elapsed);
 
     if (is_on_ground && velocity.x != 0) {
@@ -21,10 +37,9 @@ void Player::update(float elapsed) {
         walk_anim_time = 0;
     }
 
+    atk_time += elapsed;
     if (is_attacking) {
-        atk_time += elapsed;
         if (atk_time >= atk_length) {
-            atk_time = 0;
             is_attacking = false;
         }
     }
@@ -32,15 +47,15 @@ void Player::update(float elapsed) {
     update_sprite_spec();
 }
 
-uint8_t Player::get_max_sprites() {
+uint8_t Enemy::get_max_sprites() {
     return max_sprite_count;
 }
 
-uint8_t Player::get_sprite_spec() {
+uint8_t Enemy::get_sprite_spec() {
     return current_sprite_spec;
 }
 
-void Player::update_walk_velocity(int8_t dir, float elapsed) {
+void Enemy::update_walk_velocity(int8_t dir, float elapsed) {
     if (dir < 0 && !facing_left) {
         facing_left = true;
     }
@@ -64,7 +79,7 @@ void Player::update_walk_velocity(int8_t dir, float elapsed) {
     velocity.x = glm::clamp(velocity.x + to_add, -max_walk_speed, max_walk_speed);
 }
 
-void Player::update_fall_velocity(float elapsed) {
+void Enemy::update_fall_velocity(float elapsed) {
     if (at.y <= 0) {
 		at.y = 0;
         is_on_ground = true;
@@ -81,12 +96,10 @@ void Player::update_fall_velocity(float elapsed) {
 		velocity.y -= gravity * elapsed;
 	}
 
-	at.x = glm::clamp(at.x + velocity.x * elapsed, 8.f, 240.f);
-    at.y = glm::clamp(at.y + velocity.y * elapsed, 0.f, 240.f);
-
+	at += velocity * elapsed;
 }
 
-void Player::jump() {
+void Enemy::jump() {
     if (jump_count >= max_num_jumps) {
         return;
     }
@@ -95,11 +108,11 @@ void Player::jump() {
     is_on_ground = false;
 }
 
-void Player::attack() {
+void Enemy::attack() {
     is_attacking = true;
 }
 
-void Player::update_sprite_spec() {
+void Enemy::update_sprite_spec() {
     if (is_on_ground) {
         if (!facing_left) {
             if (walk_anim_time < 0.1f) {
