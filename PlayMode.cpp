@@ -9,7 +9,7 @@
 #include <random>
 #include <memory>
 
-Load<SpriteAtlas> sprite_atlas(LoadTagEarly, [&](){
+Load<SpriteAtlas> sprite_atlas(LoadTagEarly, [](){
 	return new SpriteAtlas(data_path("game1.atlas"));
 });
 
