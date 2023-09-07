@@ -1,17 +1,20 @@
-#include <glm/glm.hpp>
+#pragma once
 
-class Player {
+#include "GameObject.hpp"
+#include <glm/glm.hpp>
+#include "SpriteAtlas.hpp"
+
+class Player : public GameObject {
 public:
 	Player();
 	virtual ~Player();
 
-	void update(float elapsed);
+	virtual void update(float elapsed) override;
 
 	void jump();
 
 	bool facing_left = 0;
 	int8_t walk_dir = 0; // this is just -1, 0, or 1
-	glm::vec2 at = glm::vec2(30, 30);
 	glm::vec2 velocity = glm::vec2(0.0f);
 
 protected:
@@ -27,6 +30,9 @@ protected:
 
 	uint8_t max_num_jumps = 2;
 	uint8_t jump_count = 0;
+
+	uint8_t current_sprite_spec = 0;
+	uint8_t max_sprite_count = 4;
 
 	void update_walk_velocity(int8_t dir, float elapsed);
 	void update_fall_velocity(float elapsed);

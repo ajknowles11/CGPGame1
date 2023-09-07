@@ -1,7 +1,7 @@
 #include "Player.hpp"
 
 Player::Player() {
-
+    currentSpriteSpec = 0;
 }
 
 Player::~Player() {
