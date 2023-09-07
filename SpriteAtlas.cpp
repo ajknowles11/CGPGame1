@@ -1,9 +1,9 @@
 #include "SpriteAtlas.hpp"
 
-SpriteSpec::SpriteSpec(std::vector<uint8_t> tile_ids, std::vector<uint8_t> plt_ids, std::vector<glm::i8vec2> offsets) {
-    assert(tile_ids.size() == plt_ids.size() && plt_ids.size() == offsets.size());
+SpriteSpec::SpriteSpec(std::vector<uint8_t> plt_ids, std::vector<uint8_t> tile_ids, std::vector<glm::i8vec2> offsets) {
+    assert(plt_ids.size() == tile_ids.size() && tile_ids.size() == offsets.size());
     for (uint8_t i = 0; i < offsets.size(); i++) {
-        tiles.emplace_back(Tile{tile_ids[i], plt_ids[i], offsets[i]});
+        tiles.emplace_back(Tile{plt_ids[i], tile_ids[i], offsets[i]});
     }
 }  
 

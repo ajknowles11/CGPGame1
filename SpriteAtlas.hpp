@@ -8,13 +8,13 @@
 // Struct for sprite specifiers, which define the primitive sprites needed to draw a game object including palettes and offsets.
 // Base structure inspired by Jim McCann's BigSprite declaration in Discord chat
 struct SpriteSpec {
-    SpriteSpec(std::vector<uint8_t> tile_ids, std::vector<uint8_t> plt_ids, std::vector<glm::i8vec2> offsets);
+    SpriteSpec(std::vector<uint8_t> plt_ids, std::vector<uint8_t> tile_ids, std::vector<glm::i8vec2> offsets);
     ~SpriteSpec();
 	struct Tile {
-    uint8_t tile_index; //index into tile pool shared by all BigSprites
-    uint8_t palette_index; //index into palette pool shared by all BigSprites  
-    glm::i8vec2 offset; //offset of tile relative to character base point
-  };
+        uint8_t palette_index; //index into palette pool shared by all SpriteSpecs 
+        uint8_t tile_index; //index into tile pool shared by all SpriteSpecs 
+        glm::i8vec2 offset; //offset of tile relative to character base point
+    };
   std::vector<Tile> tiles;
 };
 
