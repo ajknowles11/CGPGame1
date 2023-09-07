@@ -10,6 +10,26 @@ Player::~Player() {
 void Player::update(float elapsed) {
     update_walk_velocity(walk_dir, elapsed);
     update_fall_velocity(elapsed);
+
+    if (is_on_ground && velocity.x != 0) {
+        walk_anim_time += elapsed;
+        while (walk_anim_time >= walk_anim_length) {
+            walk_anim_time -= walk_anim_length;
+        }
+    }
+    else {
+        walk_anim_time = 0;
+    }
+
+    if (is_attacking) {
+        atk_time += elapsed;
+        if (atk_time >= atk_length) {
+            atk_time = 0;
+            is_attacking = false;
+        }
+    }
+
+    update_sprite_spec();
 }
 
 uint8_t Player::get_max_sprites() {
@@ -26,13 +46,6 @@ void Player::update_walk_velocity(int8_t dir, float elapsed) {
     }
     else if (dir > 0 && facing_left) {
         facing_left = false;
-    }
-
-    if (facing_left) {
-        current_sprite_spec = 1;
-    }
-    else {
-        current_sprite_spec = 0;
     }
     // if not moving in direction, character decelerates
     if (dir == 0) {
@@ -54,6 +67,7 @@ void Player::update_walk_velocity(int8_t dir, float elapsed) {
 void Player::update_fall_velocity(float elapsed) {
     if (at.y <= 0) {
 		at.y = 0;
+        is_on_ground = true;
         if (velocity.y < 0) { // this means we just landed
             velocity.y = 0;
             jump_count = 0;
@@ -63,6 +77,7 @@ void Player::update_fall_velocity(float elapsed) {
         if (jump_count == 0) { // this means we just started falling (not in air yet)
             jump_count += 1;
         }
+        is_on_ground = false;
 		velocity.y -= gravity * elapsed;
 	}
 
@@ -75,4 +90,44 @@ void Player::jump() {
     }
     jump_count += 1;
     velocity.y = 200.0;
+    is_on_ground = false;
+}
+
+void Player::attack() {
+    is_attacking = true;
+}
+
+void Player::update_sprite_spec() {
+    if (is_on_ground) {
+        if (!facing_left) {
+            if (walk_anim_time < 0.1f) {
+                current_sprite_spec = is_attacking ? 6 : 0;
+            }
+            else if (walk_anim_time < 0.2f) {
+                current_sprite_spec = is_attacking ? 7 : 1;
+            }
+            else {
+                current_sprite_spec = is_attacking ? 8 : 2;
+            }
+        }
+        else {
+            if (walk_anim_time < 0.1f) {
+                current_sprite_spec = is_attacking ? 9 : 3;
+            }
+            else if (walk_anim_time < 0.2f) {
+                current_sprite_spec = is_attacking ? 10 : 4;
+            }
+            else {
+                current_sprite_spec = is_attacking ? 11 : 5;
+            }
+        }
+    }
+    else {
+        if (!facing_left) {
+            current_sprite_spec = is_attacking ? 6 : 0;
+        }
+        else {
+            current_sprite_spec = is_attacking ? 9 : 3;
+        }
+    }
 }

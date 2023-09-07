@@ -37,7 +37,7 @@ struct PlayMode : Mode {
 		uint8_t downs = 0;
 		uint8_t pressed = 0;
 		uint8_t last_pressed = 0;
-	} left, right, down, up;
+	} left, right, down, up, attack;
 
 	//some weird background animation:
 	float background_fade = 0.0f;

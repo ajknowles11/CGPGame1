@@ -54,6 +54,10 @@ bool PlayMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size)
 			down.pressed = true;
 			return true;
 		}
+		else if (evt.key.keysym.sym == SDLK_z) {
+			attack.downs += 1;
+			attack.pressed = true;
+		}
 	} else if (evt.type == SDL_KEYUP) {
 		if (evt.key.keysym.sym == SDLK_LEFT) {
 			left.pressed = false;
@@ -67,6 +71,9 @@ bool PlayMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size)
 		} else if (evt.key.keysym.sym == SDLK_DOWN) {
 			down.pressed = false;
 			return true;
+		}
+		else if (evt.key.keysym.sym == SDLK_z) {
+			attack.pressed = false;
 		}
 	}
 
@@ -96,11 +103,17 @@ void PlayMode::update(float elapsed) {
 		player->jump();
 	}
 
+	// pass attack input to player
+	if (attack.pressed && !attack.last_pressed) {
+		player->attack();
+	}
+
 	//reset button press counters:
 	left.downs = 0;
 	right.downs = 0;
 	up.downs = 0;
 	down.downs = 0;
+	attack.downs = 0;
 
 	// update GameObjects
 	for (auto obj : game_objects) {
@@ -112,6 +125,7 @@ void PlayMode::update(float elapsed) {
 	right.last_pressed = right.pressed;
 	up.last_pressed = up.pressed;
 	down.last_pressed = down.pressed;
+	attack.last_pressed = attack.pressed;
 }
 
 void PlayMode::draw(glm::uvec2 const &drawable_size) {

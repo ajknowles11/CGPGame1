@@ -19,6 +19,7 @@ def group_layers(image):
     return (specs, tiles, palettes)
 
 def read_tiles_in_layer(layer, palette_list, tile_list, specs_string):
+    layer_tile_count = 0
     for j in range(layer.height / 8):
             for i in range(layer.width / 8):
                 px_rgn = layer.get_pixel_rgn(i*8, j*8, 8, 8)
@@ -81,8 +82,10 @@ def read_tiles_in_layer(layer, palette_list, tile_list, specs_string):
                 specs_string += chr(t_index)
                 # Assign offset for tile (assumes 7 by 7 tile layout for sprite specs!!!)
                 specs_string += chr(i) + chr(6-j)
+                # And increment tile count
+                layer_tile_count += 1
     
-    return (palette_list, tile_list, specs_string)
+    return (palette_list, tile_list, specs_string, layer_tile_count)
 
 def read_sprites(spec_layers, palette_list):
     tile_list = []
@@ -90,11 +93,9 @@ def read_sprites(spec_layers, palette_list):
     specinfo_string = ""
 
     index = 0
-    layer_tile_count = 0
     for layer in spec_layers:
-        (palette_list, tile_list, specs_string) = read_tiles_in_layer(layer, palette_list, tile_list, specs_string)
+        (palette_list, tile_list, specs_string, layer_tile_count) = read_tiles_in_layer(layer, palette_list, tile_list, specs_string)
         # Use num tiles to set start and end indices for spec info struct
-        layer_tile_count = len(tile_list) - layer_tile_count
         specinfo_string += chr(index) + chr(index + layer_tile_count)
         index += layer_tile_count
 
@@ -102,7 +103,7 @@ def read_sprites(spec_layers, palette_list):
 
 def read_tiles(tile_layers, palette_list, tile_list):
     for layer in tile_layers:
-        (palette_list, tile_list, _) = read_tiles_in_layer(layer, palette_list, tile_list, "")
+        (palette_list, tile_list, _, _) = read_tiles_in_layer(layer, palette_list, tile_list, "")
     
     # Convert to PPU tile format
     bit0list = []
