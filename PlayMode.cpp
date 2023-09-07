@@ -112,54 +112,23 @@ void PlayMode::update(float elapsed) {
 	right.last_pressed = right.pressed;
 	up.last_pressed = up.pressed;
 	down.last_pressed = down.pressed;
-
-	std::cout << player->at.x << ',' << player->at.y << '\n';
-	std::cout << std::to_string(game_objects.size()) << '\n';
 }
 
 void PlayMode::draw(glm::uvec2 const &drawable_size) {
 	//--- set ppu state based on game state ---
 
 	//handle game object sprites
-	// for (auto obj : game_objects) {
-	// 	SpriteSpec spec = spec_table[obj->get_sprite_spec()];
-	// 	std::vector<uint8_t> sprite_idxs = obj->sprite_table_indices;
+	for (auto obj : game_objects) {
+		SpriteSpec spec = spec_table[obj->get_sprite_spec()];
+		std::vector<uint8_t> sprite_idxs = obj->sprite_table_indices;
 
-	// 	std::cout << std::to_string(obj->sprite_table_indices.size()) << '\n';
-
-	// 	for (int i = 0; i < sprite_idxs.size(); i++) {
-	// 		if (i >= spec.tiles.size()) {
-	// 			ppu.sprites[sprite_idxs[i]].y = 240;
-	// 		}
-	// 		ppu.sprites[sprite_idxs[i]].x = int8_t(obj->at.x) + (spec.tiles[i].offset.x - 3)*8;
-	// 		ppu.sprites[sprite_idxs[i]].y = int8_t(obj->at.y) + (spec.tiles[i].offset.y - 3)*8;
-	// 		ppu.sprites[sprite_idxs[i]].index = spec.tiles[i].tile_index;
-	// 		ppu.sprites[sprite_idxs[i]].attributes = spec.tiles[i].palette_index;
-	// 		if (obj->render_behind) ppu.sprites[sprite_idxs[i]].attributes |= 0x80;
-	// 	}
-	// }
-	for (auto p : ppu.palette_table) {
-		std::cout << "PLTS:";
-		for (auto c : p) {
-			std::cout << " ";
-			for (int i = 0; i < 4; i++)
-				std::cout << std::to_string(c[i]) << ',';
+		for (int i = 0; i < spec.tiles.size(); i++) {
+			ppu.sprites[sprite_idxs[i]].x = int8_t(obj->at.x) + (spec.tiles[i].offset.x - 3)*8;
+			ppu.sprites[sprite_idxs[i]].y = int8_t(obj->at.y) + (spec.tiles[i].offset.y - 3)*8;
+			ppu.sprites[sprite_idxs[i]].index = spec.tiles[i].tile_index;
+			ppu.sprites[sprite_idxs[i]].attributes = spec.tiles[i].palette_index;
+			if (obj->render_behind) ppu.sprites[sprite_idxs[i]].attributes |= 0x80;
 		}
-		std::cout << '\n';
-	}
-
-	ppu.sprites[0].x = (int8_t)player->at.x;
-	ppu.sprites[0].y = (int8_t)player->at.y + 8;
-	ppu.sprites[0].index = 0;
-	ppu.sprites[0].attributes = 0;
-
-	ppu.sprites[1].x = (int8_t)player->at.x + 8;
-	ppu.sprites[1].y = (int8_t)player->at.y + 8;
-	ppu.sprites[1].index = 1;
-	ppu.sprites[1].attributes = 1;
-
-	for (int i = 6; i < 64; i++) {
-		ppu.sprites[i].y = 240;
 	}
 
 	ppu.background_color = glm::u8vec4(0xD2, 0x66, 0x00, 0xFF);

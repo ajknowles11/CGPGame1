@@ -12,8 +12,28 @@ void Player::update(float elapsed) {
     update_fall_velocity(elapsed);
 }
 
+uint8_t Player::get_max_sprites() {
+    return max_sprite_count;
+}
+
+uint8_t Player::get_sprite_spec() {
+    return current_sprite_spec;
+}
+
 void Player::update_walk_velocity(int8_t dir, float elapsed) {
-    facing_left = dir < 0;
+    if (dir < 0 && !facing_left) {
+        facing_left = true;
+    }
+    else if (dir > 0 && facing_left) {
+        facing_left = false;
+    }
+
+    if (facing_left) {
+        current_sprite_spec = 1;
+    }
+    else {
+        current_sprite_spec = 0;
+    }
     // if not moving in direction, character decelerates
     if (dir == 0) {
         float to_add = walk_decel * elapsed;

@@ -17,6 +17,10 @@ public:
 	int8_t walk_dir = 0; // this is just -1, 0, or 1
 	glm::vec2 velocity = glm::vec2(0.0f);
 
+
+	virtual uint8_t get_max_sprites() override;
+    virtual uint8_t get_sprite_spec() override;
+
 protected:
 
 	uint8_t hp = 3;
