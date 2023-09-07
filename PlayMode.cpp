@@ -97,7 +97,7 @@ void PlayMode::update(float elapsed) {
 		player = std::make_shared<Player>();
 		player_spawned = try_spawn_object(player, glm::vec2(128,0));
 		
-		try_spawn_object(std::make_shared<Enemy>(player, 1), glm::vec2(0,0));
+		try_spawn_object(std::make_shared<Enemy>(player, (uint8_t)1), glm::vec2(0,0));
 	}
 
 	// spawn enemy
@@ -108,7 +108,7 @@ void PlayMode::update(float elapsed) {
 		left_side_spawn = !left_side_spawn;
 
 	// hp scale
-		uint8_t hp = 1 + (uint8_t)(total_elapsed / 30); 
+		uint8_t hp = 1 + static_cast<uint8_t>(std::round(total_elapsed / 30)); 
 		try_spawn_object(std::make_shared<Enemy>(player, hp), glm::vec2(x,0));
 	}
 
