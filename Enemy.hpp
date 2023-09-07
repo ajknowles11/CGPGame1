@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include "SpriteAtlas.hpp"
 #include "Player.hpp"
+#include <memory>
 
 class Enemy : public GameObject {
 public:

@@ -3,6 +3,7 @@
 #include "GameObject.hpp"
 #include <glm/glm.hpp>
 #include "SpriteAtlas.hpp"
+#include <memory>
 
 class Player : public GameObject {
 public:
