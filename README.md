@@ -22,7 +22,7 @@ Arrow keys to move, z to attack. You can also double jump.
 
 You have 3 hit points and need to survive enemies that spawn offscreen every few seconds. 
 
-NOTE: I spent almost all of my time working on asset pipelines so the actual assets themselves are a little incomplete, and there are bugs. If nothing spawns try relaunching, and I don't know why there are cat heads in the background (maybe victims of the player character in the past).
+NOTE: I spent almost all of my time working on asset pipelines so the actual assets themselves are a little incomplete, and there are bugs. If nothing spawns try relaunching, I'm not sure why behavior is so inconsistent (load order is probably a factor).
 
 This game was built with [NEST](NEST.md).
 

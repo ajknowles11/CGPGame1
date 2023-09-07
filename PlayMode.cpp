@@ -31,7 +31,7 @@ PlayMode::PlayMode() {
 		ppu.sprites[i].y = 240;
 	}
 
-	for (auto v : ppu.background) {
+	for (auto &v : ppu.background) {
 		v = 64;
 	}
 }
@@ -174,7 +174,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		SpriteSpec spec = spec_table[obj->get_sprite_spec()];
 		std::vector<uint8_t> sprite_idxs = obj->sprite_table_indices;
 
-		for (int i = 0; i < spec.tiles.size(); i++) {
+		for (size_t i = 0; i < spec.tiles.size(); i++) {
 			ppu.sprites[sprite_idxs[i]].x = int8_t(obj->at.x) + (spec.tiles[i].offset.x - 3)*8;
 			ppu.sprites[sprite_idxs[i]].y = int8_t(obj->at.y) + (spec.tiles[i].offset.y - 3)*8;
 			ppu.sprites[sprite_idxs[i]].index = spec.tiles[i].tile_index;
